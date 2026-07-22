@@ -8,6 +8,8 @@
 .secret-inline small{display:block;color:#efc77d;text-transform:uppercase;letter-spacing:.14em;font-size:7px;margin-bottom:8px}
 .secret-inline p{margin:0;color:#f4eee6;font:18px/1.45 "Italiana",serif}
 .cantarina-stage{min-height:70svh;background:#f8efe3;color:#17130f;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:75px 20px}
+.cantarina-stage[hidden]{display:none!important}
+.cantarina-stage.is-unlocked{animation:cantarinaReveal .85s ease both}
 .cantarina-stage .music-mark{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#17130f;color:#dcb36b;font-size:22px;margin-bottom:24px}
 .cantarina-stage .kicker{color:#936427;margin:0}
 .cantarina-stage h2{font:50px/1 "Italiana",serif;margin:12px 0 5px;color:#9c1425}
@@ -15,6 +17,7 @@
 .cantarina-stage iframe{width:min(100%,560px);border-radius:8px;box-shadow:0 18px 45px #52372320}
 .cantarina-stage a{margin-top:17px;color:#8f1425;text-transform:uppercase;letter-spacing:.12em;font-size:8px;text-underline-offset:5px;min-height:44px;display:flex;align-items:center}
 @keyframes secretNative{from{opacity:0;transform:translateY(-6px)}}
+@keyframes cantarinaReveal{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 @media(max-width:359px){.secret-card summary{font-size:7px;padding:0 11px}.secret-inline p{font-size:16px}.cantarina-stage h2{font-size:43px}}
 
 /* Controles directos: funcionan igual con toque, mouse y teclado. */

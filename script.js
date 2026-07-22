@@ -1,5 +1,5 @@
 const chapters = [
-  { title:"El día que<br><em>todo cambió</em>", label:"21 de diciembre · El comienzo", text:"Ese día preparé cada luz, cada pétalo y cada detalle con una sola ilusión: preguntarte si querías comenzar esta historia conmigo.", secret:"Mientras esperaba que llegaras estaba muy nervioso, pero cuando te vi supe que todo el esfuerzo había valido la pena.", pos:"center 38%", sat:"1", photo:"assets/photos/2025-12-21-declaracion-pareja.webp", albumDate:"21 · 12 · 2025", albumTitle:"El día de nuestro <em>sí.</em>", albumText:"Tres instantes de una tarde que cambió para siempre nuestra historia.", gallery:[
+  { title:"El día que<br><em>todo cambió</em>", label:"21 de diciembre · El comienzo", text:"Ese día preparé cada luz, cada pétalo y cada detalle con una sola ilusión: preguntarte si querías comenzar esta historia conmigo.", secret:"Mientras iba a tu casa para recogerte estaba tan nervioso que no dejaba de pensar en cómo saldría todo. Pero cuando te vi salir de tu casa, tan guapa, todos esos nervios se convirtieron en una certeza: cada detalle y todo el esfuerzo habían valido la pena.", pos:"center 38%", sat:"1", photo:"assets/photos/2025-12-21-declaracion-pareja.webp", albumDate:"21 · 12 · 2025", albumTitle:"El día de nuestro <em>sí.</em>", albumText:"Tres instantes de una tarde que cambió para siempre nuestra historia.", gallery:[
     ["assets/photos/2025-12-21-declaracion-pareja.webp","El momento de nuestra declaración","El instante","Cuando todo se volvió real."],
     ["assets/photos/2025-12-21-ramo.webp","Ella sosteniendo el ramo de flores","Mi chiquilina","La imagen que quisiera guardar para siempre."],
     ["assets/photos/2025-12-21-preparacion.webp","La preparación romántica de nuestra declaración","Todo por ti","Cada luz y cada pétalo tenían tu nombre."]
@@ -7,7 +7,7 @@ const chapters = [
   { title:"Nuestra primera<br><em>Navidad juntos</em>", label:"Capítulo II · Nuestro primer diciembre", text:"Nuestra primera Navidad tuvo suéteres iguales, una pequeña compañía blanca y esa sensación bonita de estar creando nuestras propias tradiciones.", secret:"Lo mejor de esa Navidad no estuvo debajo del árbol. Estaba a mi lado usando el mismo suéter que yo.", pos:"center 30%", sat:"1", photo:"assets/memories/navidad/navidad-01.webp", albumDate:"Nuestra primera Navidad", albumTitle:"El primer diciembre <em>de nosotros.</em>", albumText:"Una foto imperfecta y un recuerdo completamente nuestro.", gallery:[
     ["assets/memories/navidad/navidad-01.webp","Nuestra primera Navidad juntos","Nuestra Navidad","Tú, yo y una pequeña invitada vestida para celebrar."]
   ]},
-  { title:"Nuestro primer viaje<br><em>como novios</em>", label:"07 y 08 de febrero · La aventura", text:"Salir contigo fue descubrir que no importa tanto el destino cuando la mejor parte del viaje va caminando a tu lado.", secret:"De ese viaje recuerdo los lugares, pero más todavía recuerdo cómo se sentía saber que ya éramos nosotros contra el mundo.", pos:"center 25%", sat:"1", photo:"assets/memories/viaje/viaje-03.webp", albumDate:"07–08 · 02 · 2026", albumTitle:"La primera aventura <em>juntos.</em>", albumText:"Besos, frío, ocurrencias y una compañera blanca que también quiso salir en las fotos.", gallery:[
+  { title:"Nuestro primer viaje<br><em>como novios</em>", label:"07 y 08 de febrero · La aventura", text:"Salir contigo fue descubrir que no importa tanto el destino cuando la mejor parte del viaje va caminando a tu lado.", secret:"Pasar mi primer Carnaval contigo fue una de las mejores experiencias que he vivido. Compartir esa aventura contigo y con nuestra bebé gatuna hizo que cada momento fuera todavía más especial.", pos:"center 25%", sat:"1", photo:"assets/memories/viaje/viaje-03.webp", albumDate:"07–08 · 02 · 2026", albumTitle:"La primera aventura <em>juntos.</em>", albumText:"Besos, frío, ocurrencias y una compañera blanca que también quiso salir en las fotos.", gallery:[
     ["assets/memories/viaje/viaje-03.webp","Selfie durante nuestro primer viaje","Compañeros de viaje","Mi lugar favorito siempre termina siendo a tu lado."],
     ["assets/memories/viaje/viaje-01.webp","Los dos enviando un beso junto a una gata blanca","Tres viajeros","Una parada, muchos besos y cero fotos serias."],
     ["assets/memories/viaje/viaje-02.webp","Una gata blanca acercándose mientras nos tomábamos una foto","El beso inesperado","Ella decidió ser la protagonista y tenía razón."]
@@ -229,12 +229,20 @@ document.querySelectorAll(".bloom").forEach((bloom, index) => bloom.addEventList
 
 function unlockFinale() {
   const garden = document.querySelector("#finalGarden");
+  const songStage = document.querySelector(".cantarina-stage");
+  const songFrame = songStage.querySelector("iframe");
   garden.classList.add("complete");
+  songStage.hidden = false;
+  songStage.setAttribute("aria-hidden", "false");
+  songStage.classList.add("is-unlocked");
+  const playMessage = JSON.stringify({ event:"command", func:"playVideo", args:[] });
+  songFrame.contentWindow?.postMessage(playMessage, "*");
+  setTimeout(() => songFrame.contentWindow?.postMessage(playMessage, "*"), 350);
   createPetals(55);
   setTimeout(() => {
     const reveal = document.querySelector("#finalReveal");
     reveal.setAttribute("aria-hidden", "false");
-    document.querySelector(".cantarina-stage").scrollIntoView({ behavior:"smooth" });
+    songStage.scrollIntoView({ behavior:"smooth" });
   }, 2300);
 }
 
