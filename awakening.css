@@ -1,0 +1,12 @@
+.awakening{position:absolute;inset:0;z-index:3;display:grid;place-items:center;padding:30px;opacity:0;visibility:hidden;background:#020604;text-align:center}
+.awakening.play{opacity:1;visibility:visible}
+.awakening p,.awakening strong{position:absolute;opacity:0}
+.awakening p{font:400 clamp(30px,8vw,52px) "Italiana",serif}
+.awakening strong{font:400 clamp(35px,10vw,66px) "Italiana",serif;color:#efc77d}
+.awakening.play p:first-child{animation:phrase 2.2s .3s}
+.awakening.play p:nth-child(2){animation:phrase 2.2s 2.35s}
+.awakening.play strong{animation:phraseLast 2.5s 4.4s forwards}
+.premiere.awake .premiere-bg{filter:brightness(.25) saturate(.7);transition:filter 2s}
+.premiere.awake .premiere-content{opacity:0;transition:opacity .7s}
+@keyframes phrase{0%,100%{opacity:0;transform:translateY(10px)}25%,72%{opacity:1;transform:none}}
+@keyframes phraseLast{0%{opacity:0;transform:scale(.96)}35%,100%{opacity:1;transform:none}}

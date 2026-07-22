@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050a07">
+  <meta name="description" content="Siete meses, siete capítulos y toda una vida por escribir.">
+  <title>Para mi chiquilina | 7 meses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Italiana&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="awakening.css?v=4">
+  <link rel="stylesheet" href="finale.css?v=4">
+  <link rel="stylesheet" href="responsive.css?v=5">
+  <link rel="stylesheet" href="native-interactions.css?v=6">
+  <link rel="stylesheet" href="memories.css?v=9">
+</head>
+<body class="locked">
+  <div class="film-grain" aria-hidden="true"></div>
+  <canvas id="petalCanvas" aria-hidden="true"></canvas>
+
+  <div class="premiere" id="premiere">
+    <div class="premiere-bg"></div>
+    <div class="premiere-content">
+      <span class="premiere-mark">VII</span>
+      <p class="kicker">Una experiencia hecha solo para ti</p>
+      <h1>Mi chiquilina,<br><em>ponte audífonos.</em></h1>
+      <p>Hay cosas que no caben en una carta.<br>Esta vez quiero que las vivas.</p>
+      <button class="enter" id="enterExperience"><span>Comenzar nuestra historia</span><i></i></button>
+      <small>La experiencia incluye sonido</small>
+    </div>
+    <div class="awakening" id="awakening" aria-live="polite">
+      <p>Este jardín no existía...</p>
+      <p>hasta que llegaste tú.</p>
+      <strong>Para ti, mi chiquilina.</strong>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#portada" aria-label="Volver al inicio"><span>VII</span><i></i><b>Nuestra historia</b></a>
+    <button class="sound" id="soundToggle" aria-label="Activar o silenciar narración" title="Sonido">
+      <svg class="sound-on" viewBox="0 0 24 24"><path d="M11 5 6.8 8.5H3v7h3.8L11 19V5Zm4 3.5a5 5 0 0 1 0 7M17.8 6a8.5 8.5 0 0 1 0 12"/></svg>
+      <svg class="sound-off" viewBox="0 0 24 24"><path d="m11 5-4.2 3.5H3v7h3.8L11 19V5Zm4.5 5 5 5m0-5-5 5"/></svg>
+    </button>
+  </header>
+
+  <nav class="chapter-nav" id="chapterNav" aria-label="Capítulos">
+    <span class="nav-line"><i id="navProgress"></i></span>
+    <div class="nav-dots"></div>
+    <span class="nav-count"><b id="currentChapter">00</b> / 07</span>
+  </nav>
+
+  <main>
+    <section class="cover scene" id="portada" data-scene="0">
+      <div class="scene-image image-field" data-parallax></div>
+      <div class="scene-vignette"></div>
+      <div class="cover-copy">
+        <p class="kicker">Siete meses contigo</p>
+        <h2>Todo florece<br><em>desde que llegaste.</em></h2>
+        <p class="lead">Un recorrido por siete momentos que hicieron de nosotros mi lugar favorito.</p>
+      </div>
+      <a class="continue" href="#mes-1"><span>Desliza para entrar</span><i></i></a>
+    </section>
+
+    <div id="chapters"></div>
+
+    <section class="interlude scene" id="interludio" data-scene="8">
+      <div class="scene-image image-night"></div>
+      <div class="interlude-copy">
+        <span class="giant-seven">7</span>
+        <p class="kicker">Meses · historias · versiones de nosotros</p>
+        <blockquote>“No quiero un amor perfecto.<br>Quiero este amor, el nuestro.”</blockquote>
+      </div>
+    </section>
+
+    <section class="finale scene" id="final" data-scene="9">
+      <div class="final-garden" id="finalGarden">
+        <div class="final-photo" aria-label="Ramo de siete tulipanes interactivos">
+          <button class="bloom" style="--x:52%;--y:17%" aria-label="Abrir tulipán uno"><span>1</span></button>
+          <button class="bloom" style="--x:28%;--y:23%" aria-label="Abrir tulipán dos"><span>2</span></button>
+          <button class="bloom" style="--x:73%;--y:25%" aria-label="Abrir tulipán tres"><span>3</span></button>
+          <button class="bloom" style="--x:47%;--y:32%" aria-label="Abrir tulipán cuatro"><span>4</span></button>
+          <button class="bloom" style="--x:17%;--y:38%" aria-label="Abrir tulipán cinco"><span>5</span></button>
+          <button class="bloom" style="--x:81%;--y:39%" aria-label="Abrir tulipán seis"><span>6</span></button>
+          <button class="bloom" style="--x:60%;--y:47%" aria-label="Abrir tulipán siete"><span>7</span></button>
+        </div>
+        <div class="final-prompt">
+          <p class="kicker">Un último detalle</p>
+          <h2>Toca los siete tulipanes<br><em>y abre mi corazón.</em></h2>
+          <div class="love-words" id="loveWords" aria-live="polite"></div>
+          <span class="bloom-count"><b id="bloomCount">0</b> / 7</span>
+        </div>
+      </div>
+      <section class="cantarina-stage" aria-label="Nuestra canción">
+        <span class="music-mark">♫</span>
+        <p class="kicker">Nuestra canción</p>
+        <h2>Cantarina</h2>
+        <p>Willy Claure · Milton Cortez</p>
+        <iframe title="Cantarina en Spotify" src="https://open.spotify.com/embed/track/19Hyd2zQbFQMLZU4HrWX2Z?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        <a href="https://open.spotify.com/track/19Hyd2zQbFQMLZU4HrWX2Z" target="_blank" rel="noopener">Abrir canción en Spotify</a>
+      </section>
+      <div class="finale-inner final-reveal" id="finalReveal" aria-hidden="true">
+        <p class="kicker">Esta canción siempre tendrá tu nombre</p>
+        <h2>Mi ratoncita,<br><em>sigamos bailando la vida.</em></h2>
+        <p class="final-letter">Gracias por estos siete meses de amor bonito. Por tu risa, por tu paciencia y por ser hogar incluso a la distancia. Te elegiría otra vez, en esta y en todas mis vidas.</p>
+        <button class="promise" id="promiseBtn"><span>Presiona para sellar nuestra promesa</span><i>♡</i></button>
+        <p class="signature">Con todo mi amor,<br><strong>quien te ama muchísimo</strong></p>
+      </div>
+    </section>
+  </main>
+
+  <div class="voice-player" id="voicePlayer">
+    <button id="voicePlay" aria-label="Reproducir o pausar"><span class="play-icon">▶</span></button>
+    <div><small>Una nota de voz para ti</small><strong id="voiceTitle">Mes uno</strong><span class="audio-track"><i id="audioProgress"></i></span></div>
+    <span id="audioTime">0:00</span>
+  </div>
+
+  <div class="love-burst" id="loveBurst"><span>Te elijo a ti.</span></div>
+  <audio id="narration" preload="metadata"></audio>
+  <script src="soundscape.js?v=10"></script>
+  <script src="script.js?v=10"></script>
+</body>
+</html>

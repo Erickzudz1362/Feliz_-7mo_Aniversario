@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Estudio de voz | 7 meses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap" rel="stylesheet">
+  <style>
+    :root{--red:#b51228;--gold:#ddb66c;--cream:#f8efe3}*{box-sizing:border-box}body{margin:0;background:#07130d;color:var(--cream);font-family:"DM Sans";min-height:100vh}.wrap{width:min(100% - 36px,680px);margin:auto;padding:55px 0 90px}header{border-bottom:1px solid #ffffff20;padding-bottom:30px;margin-bottom:35px}.eyebrow{text-transform:uppercase;letter-spacing:.2em;color:var(--gold);font-size:9px}h1{font:clamp(40px,11vw,65px)/1 "Italiana";margin:15px 0}header p{color:#a8b0aa;line-height:1.7;font-size:13px}.meter{height:3px;background:#ffffff12;margin:25px 0;overflow:hidden}.meter i{display:block;width:0;height:100%;background:var(--red);transition:.15s}.take{display:grid;grid-template-columns:43px 1fr auto;align-items:center;gap:13px;padding:16px 0;border-bottom:1px solid #ffffff14}.take>button{width:43px;height:43px;border-radius:50%;border:1px solid #ffffff30;background:transparent;color:#fff;font-size:16px}.take.recording>button{background:var(--red);border-color:var(--red);animation:pulse 1.2s infinite}.take div{min-width:0}.take small{display:block;color:#78847c;font-size:8px;text-transform:uppercase;letter-spacing:.15em}.take strong{font:19px "Italiana"}.take p{font-size:10px;color:#9da69f;margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.download{color:var(--gold);font-size:9px;text-transform:uppercase;letter-spacing:.1em;text-decoration:none;visibility:hidden}.download.ready{visibility:visible}.tip{margin-top:36px;padding-left:15px;border-left:1px solid var(--gold);color:#a8b0aa;font-size:11px;line-height:1.7}.back{display:inline-block;margin-top:35px;color:white;text-transform:uppercase;font-size:9px;letter-spacing:.15em;text-decoration:none}@keyframes pulse{50%{box-shadow:0 0 0 8px #b5122825}}@media(max-width:420px){.take{grid-template-columns:43px 1fr}.download{grid-column:2}}
+  </style>
+</head>
+<body><main class="wrap">
+  <header><p class="eyebrow">Estudio privado · Solo para ti</p><h1>Graba tu historia<br>con tu propia voz.</h1><p>Graba cada capítulo en un lugar silencioso. Habla despacio, como si ella estuviera frente a ti. Al terminar, descarga cada archivo y colócalo en <strong>assets/audio</strong>.</p><div class="meter"><i id="meter"></i></div></header>
+  <section id="takes"></section>
+  <p class="tip">Consejo: entre 15 y 30 segundos por capítulo es perfecto. No leas como una presentación; cuéntaselo como se lo dirías al oído. Las grabaciones nunca salen de tu dispositivo.</p>
+  <a class="back" href="index.html">← Volver a la experiencia</a>
+  </main><script>
+  const prompts=["Cómo comenzó todo","Lo que más amas de su risa","Lo que sientes en sus abrazos","Un pequeño detalle de ustedes","Lo que aprendieron juntos","Lo que más admiras de ella","Lo que sueñas para los dos"];
+  const root=document.querySelector("#takes");let recorder,stream,chunks=[],active;
+  prompts.forEach((text,i)=>{const row=document.createElement("article");row.className="take";row.innerHTML=`<button aria-label="Grabar capítulo ${i+1}">●</button><div><small>Capítulo 0${i+1}</small><strong>Mes ${i+1}</strong><p>${text}</p></div><a class="download" download="mes-${i+1}.webm">Descargar</a>`;row.querySelector("button").onclick=()=>toggle(row,i);root.appendChild(row)});
+  async function toggle(row,index){if(recorder?.state==="recording"){recorder.stop();return}stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});chunks=[];active={row,index};recorder=new MediaRecorder(stream);recorder.ondataavailable=e=>chunks.push(e.data);recorder.onstop=()=>{const blob=new Blob(chunks,{type:recorder.mimeType});const link=active.row.querySelector(".download");link.href=URL.createObjectURL(blob);link.classList.add("ready");active.row.classList.remove("recording");active.row.querySelector("button").textContent="●";stream.getTracks().forEach(t=>t.stop());document.querySelector("#meter").style.width="0"};recorder.start();row.classList.add("recording");row.querySelector("button").textContent="■";animateMeter()}
+  function animateMeter(){if(recorder?.state!=="recording")return;document.querySelector("#meter").style.width=`${25+Math.random()*75}%`;setTimeout(animateMeter,160)}
+  </script></body></html>
