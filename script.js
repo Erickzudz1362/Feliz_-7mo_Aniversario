@@ -38,7 +38,6 @@ chapters.forEach((chapter, index) => {
   section.className = "chapter scene";
   section.id = `mes-${index + 1}`;
   section.dataset.scene = String(index + 1);
-  section.dataset.audio = chapter.audio || "";
   section.innerHTML = `
     <div class="chapter-bg" style="--pos:${chapter.pos};--sat:${chapter.sat}${chapter.photo ? `;background-image:url('${chapter.photo}')` : ""}" data-parallax></div>
     <div class="chapter-content">
@@ -47,26 +46,40 @@ chapters.forEach((chapter, index) => {
       <h2>${chapter.title}</h2>
       <p class="chapter-text">${chapter.text}</p>
       <div class="chapter-actions">
-        <button class="voice-trigger${chapter.audio ? " available" : ""}" data-src="${section.dataset.audio}" data-title="Mes ${index + 1}">
-          <svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Zm-7 9a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>
-          <span>Escucha mi voz</span>
+        <button class="secret-trigger" type="button" data-testid="secret-toggle-${index + 1}" aria-expanded="false" aria-controls="secret-${index + 1}">
+          <i aria-hidden="true">+</i><span>Toca para revelar un secreto</span>
         </button>
-        <details class="secret-card">
-          <summary><i>+</i><span>Toca para revelar un secreto</span></summary>
-          <div class="secret-inline"><small>Algo que nunca te dije</small><p>${chapter.secret}</p></div>
-        </details>
+        <div class="secret-panel" id="secret-${index + 1}" hidden>
+          <small>Algo que nunca te dije</small><p>${chapter.secret}</p>
+        </div>
       </div>
     </div>`;
   chapterRoot.appendChild(section);
+  const secretTrigger = section.querySelector(".secret-trigger");
+  const secretPanel = section.querySelector(".secret-panel");
+  secretTrigger.addEventListener("click", () => {
+    const willOpen = secretTrigger.getAttribute("aria-expanded") !== "true";
+    secretTrigger.setAttribute("aria-expanded", String(willOpen));
+    secretTrigger.classList.toggle("open", willOpen);
+    secretPanel.hidden = !willOpen;
+    if (willOpen) window.gardenSoundscape?.chime();
+  });
   if (chapter.gallery?.length) {
     const album = document.createElement("section");
     album.className = `memory-album count-${chapter.gallery.length}`;
+    album.dataset.current = "0";
     album.innerHTML = `
       <header><p class="kicker">${chapter.albumDate}</p><h2>${chapter.albumTitle}</h2><p>${chapter.albumText}</p></header>
-      <div class="memory-strip">
-        ${chapter.gallery.map((item, photoIndex) => `<figure><img src="${item[0]}" alt="${item[1]}" loading="lazy"><figcaption><span>${String(photoIndex + 1).padStart(2,"0")}</span><strong>${item[2]}</strong><small>${item[3]}</small></figcaption></figure>`).join("")}
+      <div class="album-controls" aria-label="Controles del álbum">
+        <button class="album-arrow album-prev" data-testid="album-prev-${index + 1}" type="button" aria-label="Foto anterior" disabled>←</button>
+        <span><b class="album-current">1</b> / ${chapter.gallery.length}</span>
+        <button class="album-arrow album-next" data-testid="album-next-${index + 1}" type="button" aria-label="Foto siguiente" ${chapter.gallery.length === 1 ? "disabled" : ""}>→</button>
+      </div>
+      <div class="memory-strip" data-album="${index + 1}">
+        ${chapter.gallery.map((item, photoIndex) => `<figure><button class="photo-open" data-testid="photo-open-${index + 1}-${photoIndex + 1}" type="button" data-src="${item[0]}" data-alt="${item[1]}" data-caption="${item[2]} — ${item[3]}" aria-label="Ampliar foto: ${item[2]}"><img src="${item[0]}" alt="${item[1]}" loading="lazy"></button><figcaption><span>${String(photoIndex + 1).padStart(2,"0")}</span><strong>${item[2]}</strong><small>${item[3]}</small></figcaption></figure>`).join("")}
       </div>`;
     chapterRoot.appendChild(album);
+    setupAlbum(album);
   }
   const dot = document.createElement("a");
   dot.href = `#mes-${index + 1}`;
@@ -74,17 +87,81 @@ chapters.forEach((chapter, index) => {
   dots.appendChild(dot);
 });
 
-const narration = document.querySelector("#narration");
-const player = document.querySelector("#voicePlayer");
-const playButton = document.querySelector("#voicePlay");
+function setupAlbum(album) {
+  const strip = album.querySelector(".memory-strip");
+  const photos = [...strip.querySelectorAll("figure")];
+  const previous = album.querySelector(".album-prev");
+  const next = album.querySelector(".album-next");
+  const current = album.querySelector(".album-current");
+  let active = 0;
+
+  const render = () => {
+    album.dataset.current = String(active);
+    current.textContent = String(active + 1);
+    previous.disabled = active === 0;
+    next.disabled = active === photos.length - 1;
+  };
+
+  const move = direction => {
+    active = Math.max(0, Math.min(photos.length - 1, active + direction));
+    photos[active].scrollIntoView({ behavior:"smooth", block:"nearest", inline:"center" });
+    render();
+  };
+
+  previous.addEventListener("click", () => move(-1));
+  next.addEventListener("click", () => move(1));
+
+  let scrollTimer;
+  strip.addEventListener("scroll", () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const center = strip.scrollLeft + strip.clientWidth / 2;
+      active = photos.reduce((best, photo, photoIndex) => {
+        const photoCenter = photo.offsetLeft + photo.offsetWidth / 2;
+        const bestCenter = photos[best].offsetLeft + photos[best].offsetWidth / 2;
+        return Math.abs(photoCenter - center) < Math.abs(bestCenter - center) ? photoIndex : best;
+      }, 0);
+      render();
+    }, 90);
+  }, { passive:true });
+}
+
+const photoDialog = document.querySelector("#photoDialog");
+const photoDialogImage = document.querySelector("#photoDialogImage");
+const photoDialogCaption = document.querySelector("#photoDialogCaption");
+
+document.addEventListener("click", event => {
+  const photo = event.target.closest(".photo-open");
+  if (!photo) return;
+  photoDialogImage.src = photo.dataset.src;
+  photoDialogImage.alt = photo.dataset.alt;
+  photoDialogCaption.textContent = photo.dataset.caption;
+  if (typeof photoDialog.showModal === "function") photoDialog.showModal();
+  else photoDialog.setAttribute("open", "");
+});
+
+function closePhotoDialog() {
+  if (typeof photoDialog.close === "function") photoDialog.close();
+  else photoDialog.removeAttribute("open");
+}
+
+document.querySelector("#photoClose").addEventListener("click", closePhotoDialog);
+photoDialog.addEventListener("click", event => {
+  if (event.target === photoDialog) closePhotoDialog();
+});
+
 let soundEnabled = true;
 
 document.querySelector("#enterExperience").addEventListener("click", async () => {
   const premiere = document.querySelector("#premiere");
+  const awakening = document.querySelector("#awakening");
   premiere.classList.add("awake");
-  document.querySelector("#awakening").classList.add("play");
+  awakening.classList.add("play");
   setTimeout(() => {
     premiere.classList.add("hidden");
+    premiere.setAttribute("aria-hidden", "true");
+    premiere.inert = true;
+    awakening.classList.remove("play");
     document.body.classList.remove("locked");
     document.body.classList.add("started");
   }, 6500);
@@ -94,41 +171,9 @@ document.querySelector("#enterExperience").addEventListener("click", async () =>
 
 document.querySelector("#soundToggle").addEventListener("click", () => {
   soundEnabled = !soundEnabled;
-  narration.muted = !soundEnabled;
   document.body.classList.toggle("muted", !soundEnabled);
   window.gardenSoundscape?.setEnabled(soundEnabled);
 });
-
-document.addEventListener("click", event => {
-  const voice = event.target.closest(".voice-trigger");
-  if (voice) playNarration(voice.dataset.src, voice.dataset.title);
-});
-
-function playNarration(src, title) {
-  if (narration.src.endsWith(src) && !narration.paused) narration.pause();
-  else {
-    if (!narration.src.endsWith(src)) narration.src = src;
-    narration.muted = !soundEnabled;
-    narration.play();
-  }
-  document.querySelector("#voiceTitle").textContent = title;
-  player.classList.add("show");
-}
-
-playButton.addEventListener("click", () => narration.paused ? narration.play() : narration.pause());
-narration.addEventListener("play", () => { playButton.querySelector("span").textContent = "Ⅱ"; window.gardenSoundscape?.setLevel(.045); });
-narration.addEventListener("pause", () => { playButton.querySelector("span").textContent = "▶"; window.gardenSoundscape?.setLevel(.24); });
-narration.addEventListener("timeupdate", () => {
-  const ratio = narration.duration ? narration.currentTime / narration.duration : 0;
-  document.querySelector("#audioProgress").style.width = `${ratio * 100}%`;
-  document.querySelector("#audioTime").textContent = formatTime(narration.currentTime);
-});
-narration.addEventListener("ended", () => setTimeout(() => player.classList.remove("show"), 800));
-
-function formatTime(seconds) {
-  const value = Math.floor(seconds || 0);
-  return `${Math.floor(value / 60)}:${String(value % 60).padStart(2,"0")}`;
-}
 
 const scenes = document.querySelectorAll(".scene");
 const navDots = document.querySelectorAll(".nav-dots a");

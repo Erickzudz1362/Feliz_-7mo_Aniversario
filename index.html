@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="awakening.css?v=4">
   <link rel="stylesheet" href="finale.css?v=4">
   <link rel="stylesheet" href="responsive.css?v=5">
-  <link rel="stylesheet" href="native-interactions.css?v=6">
-  <link rel="stylesheet" href="memories.css?v=9">
+  <link rel="stylesheet" href="native-interactions.css?v=11">
+  <link rel="stylesheet" href="memories.css?v=11">
 </head>
 <body class="locked">
   <div class="film-grain" aria-hidden="true"></div>
@@ -39,7 +39,7 @@
 
   <header class="topbar">
     <a class="brand" href="#portada" aria-label="Volver al inicio"><span>VII</span><i></i><b>Nuestra historia</b></a>
-    <button class="sound" id="soundToggle" aria-label="Activar o silenciar narración" title="Sonido">
+    <button class="sound" id="soundToggle" aria-label="Activar o silenciar el sonido ambiente" title="Sonido ambiente">
       <svg class="sound-on" viewBox="0 0 24 24"><path d="M11 5 6.8 8.5H3v7h3.8L11 19V5Zm4 3.5a5 5 0 0 1 0 7M17.8 6a8.5 8.5 0 0 1 0 12"/></svg>
       <svg class="sound-off" viewBox="0 0 24 24"><path d="m11 5-4.2 3.5H3v7h3.8L11 19V5Zm4.5 5 5 5m0-5-5 5"/></svg>
     </button>
@@ -77,13 +77,13 @@
     <section class="finale scene" id="final" data-scene="9">
       <div class="final-garden" id="finalGarden">
         <div class="final-photo" aria-label="Ramo de siete tulipanes interactivos">
-          <button class="bloom" style="--x:52%;--y:17%" aria-label="Abrir tulipán uno"><span>1</span></button>
-          <button class="bloom" style="--x:28%;--y:23%" aria-label="Abrir tulipán dos"><span>2</span></button>
-          <button class="bloom" style="--x:73%;--y:25%" aria-label="Abrir tulipán tres"><span>3</span></button>
-          <button class="bloom" style="--x:47%;--y:32%" aria-label="Abrir tulipán cuatro"><span>4</span></button>
-          <button class="bloom" style="--x:17%;--y:38%" aria-label="Abrir tulipán cinco"><span>5</span></button>
-          <button class="bloom" style="--x:81%;--y:39%" aria-label="Abrir tulipán seis"><span>6</span></button>
-          <button class="bloom" style="--x:60%;--y:47%" aria-label="Abrir tulipán siete"><span>7</span></button>
+          <button class="bloom" data-testid="bloom-1" style="--x:52%;--y:17%" aria-label="Abrir tulipán uno"><span>1</span></button>
+          <button class="bloom" data-testid="bloom-2" style="--x:28%;--y:23%" aria-label="Abrir tulipán dos"><span>2</span></button>
+          <button class="bloom" data-testid="bloom-3" style="--x:73%;--y:25%" aria-label="Abrir tulipán tres"><span>3</span></button>
+          <button class="bloom" data-testid="bloom-4" style="--x:47%;--y:32%" aria-label="Abrir tulipán cuatro"><span>4</span></button>
+          <button class="bloom" data-testid="bloom-5" style="--x:17%;--y:38%" aria-label="Abrir tulipán cinco"><span>5</span></button>
+          <button class="bloom" data-testid="bloom-6" style="--x:81%;--y:39%" aria-label="Abrir tulipán seis"><span>6</span></button>
+          <button class="bloom" data-testid="bloom-7" style="--x:60%;--y:47%" aria-label="Abrir tulipán siete"><span>7</span></button>
         </div>
         <div class="final-prompt">
           <p class="kicker">Un último detalle</p>
@@ -97,8 +97,13 @@
         <p class="kicker">Nuestra canción</p>
         <h2>Cantarina</h2>
         <p>Willy Claure · Milton Cortez</p>
-        <iframe title="Cantarina en Spotify" src="https://open.spotify.com/embed/track/19Hyd2zQbFQMLZU4HrWX2Z?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-        <a href="https://open.spotify.com/track/19Hyd2zQbFQMLZU4HrWX2Z" target="_blank" rel="noopener">Abrir canción en Spotify</a>
+        <div class="song-video">
+          <iframe title="Cantarina de Willy Claure y Milton Cortez" src="https://www.youtube-nocookie.com/embed/Ech-u_d_8FI?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="song-links" aria-label="Opciones para escuchar Cantarina">
+          <a data-testid="cantarina-youtube" href="https://www.youtube.com/watch?v=Ech-u_d_8FI" target="_blank" rel="noopener">Ver en YouTube</a>
+          <a data-testid="cantarina-spotify" href="https://open.spotify.com/track/19Hyd2zQbFQMLZU4HrWX2Z" target="_blank" rel="noopener">Abrir en Spotify</a>
+        </div>
       </section>
       <div class="finale-inner final-reveal" id="finalReveal" aria-hidden="true">
         <p class="kicker">Esta canción siempre tendrá tu nombre</p>
@@ -110,15 +115,14 @@
     </section>
   </main>
 
-  <div class="voice-player" id="voicePlayer">
-    <button id="voicePlay" aria-label="Reproducir o pausar"><span class="play-icon">▶</span></button>
-    <div><small>Una nota de voz para ti</small><strong id="voiceTitle">Mes uno</strong><span class="audio-track"><i id="audioProgress"></i></span></div>
-    <span id="audioTime">0:00</span>
-  </div>
+  <dialog class="photo-dialog" id="photoDialog" aria-label="Fotografía ampliada">
+    <button class="photo-close" id="photoClose" type="button" aria-label="Cerrar fotografía">×</button>
+    <img id="photoDialogImage" alt="">
+    <p id="photoDialogCaption"></p>
+  </dialog>
 
   <div class="love-burst" id="loveBurst"><span>Te elijo a ti.</span></div>
-  <audio id="narration" preload="metadata"></audio>
-  <script src="soundscape.js?v=10"></script>
-  <script src="script.js?v=10"></script>
+  <script src="soundscape.js?v=11"></script>
+  <script src="script.js?v=11"></script>
 </body>
 </html>

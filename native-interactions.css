@@ -16,3 +16,36 @@
 .cantarina-stage a{margin-top:17px;color:#8f1425;text-transform:uppercase;letter-spacing:.12em;font-size:8px;text-underline-offset:5px;min-height:44px;display:flex;align-items:center}
 @keyframes secretNative{from{opacity:0;transform:translateY(-6px)}}
 @media(max-width:359px){.secret-card summary{font-size:7px;padding:0 11px}.secret-inline p{font-size:16px}.cantarina-stage h2{font-size:43px}}
+
+/* Controles directos: funcionan igual con toque, mouse y teclado. */
+html{scroll-behavior:auto}
+.awakening{pointer-events:none}
+.premiere.hidden,.premiere.hidden *{visibility:hidden!important;pointer-events:none!important}
+.chapter-actions{display:block;width:min(100%,520px)}
+.topbar,.chapter-nav{pointer-events:none}
+.topbar a,.topbar button,.chapter-nav a{pointer-events:auto}
+.chapter:before{pointer-events:none}
+.secret-trigger{width:100%;min-height:54px;display:flex;justify-content:flex-start;text-align:left;padding:0 16px;position:relative;z-index:6;border:1px solid #ffffff42;background:#07120dd9;color:#fff;cursor:pointer;pointer-events:auto;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.secret-trigger i{flex:0 0 24px;font:24px "Italiana",serif;color:#efc77d;transition:transform .25s}
+.secret-trigger.open{border-color:#efc77d99;background:#091710f2}
+.secret-trigger.open i{transform:rotate(45deg)}
+.secret-panel{position:relative;z-index:6;border:1px solid #efc77d66;border-top:0;background:#091710f2;padding:18px 16px 20px;text-align:left;animation:secretNative .3s ease}
+.secret-panel[hidden]{display:none!important}
+.secret-panel small{display:block;color:#efc77d;text-transform:uppercase;letter-spacing:.14em;font-size:7px;margin-bottom:8px}
+.secret-panel p{margin:0;color:#f4eee6;font:18px/1.5 "Italiana",serif}
+
+.cantarina-stage{padding-left:16px;padding-right:16px}
+.song-video{width:min(100%,640px);aspect-ratio:16/9;overflow:hidden;background:#120e0b;box-shadow:0 18px 45px #52372328}
+.song-video iframe{width:100%;height:100%;display:block;border:0;border-radius:0;box-shadow:none}
+.song-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px}
+.cantarina-stage .song-links a{margin:0;min-height:48px;padding:0 16px;border:1px solid #8f14254d;background:#fff9f0;color:#8f1425;text-decoration:none;justify-content:center}
+.cantarina-stage .song-links a:first-child{background:#8f1425;color:#fff;border-color:#8f1425}
+
+.photo-dialog{width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;padding:54px 14px 24px;background:#030604f5;color:#fff;overflow:auto}
+.photo-dialog::backdrop{background:#020403ed}
+.photo-dialog[open]{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.photo-dialog img{display:block;max-width:min(100%,900px);max-height:calc(100dvh - 135px);width:auto;height:auto;object-fit:contain}
+.photo-dialog p{width:min(100%,700px);margin:13px 0 0;text-align:center;font:18px/1.4 "Italiana",serif;color:#eee5dc}
+.photo-close{position:fixed;z-index:2;top:max(12px,env(safe-area-inset-top));right:14px;width:44px;height:44px;border:1px solid #ffffff55;border-radius:50%;background:#08100dcf;color:#fff;font-size:27px;line-height:1;cursor:pointer;touch-action:manipulation}
+
+@media(max-width:359px){.secret-trigger{min-height:50px;font-size:7px;padding:0 12px}.secret-panel p{font-size:16px}.song-links{width:100%}.cantarina-stage .song-links a{flex:1 1 135px;padding:0 9px;font-size:7px}}

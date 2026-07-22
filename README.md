@@ -7,10 +7,8 @@ Una experiencia romántica e interactiva creada para celebrar siete meses juntos
 - Siete capítulos con recuerdos y fotografías reales.
 - Álbumes adaptados para celular.
 - Paisaje sonoro generado en el navegador.
-- Notas de voz opcionales por capítulo.
 - Ramo interactivo de siete tulipanes.
 - Reproductor oficial de Cantarina.
-- Estudio local de grabación en `grabar.html`.
 
 ## Despliegue
 
